@@ -1,4 +1,8 @@
 
+xcom-converter
+test
+.obj
+
 *.config
 *.files
 *.includes

@@ -17,10 +17,10 @@ clean:
 	rm -f xcom-converter test
 
 xcom-converter: ${OBJECTS}
-	${CXX} -o $@ $^
+	${CXX} -pthread -o $@ $^
 
-test: ${TEST_OBJECTS}
-	${CXX} -o $@ $^ -lboost_unit_test_framework
+test: ${TEST_OBJECTS} ${OBJECTS}
+	${CXX} -pthread -o $@ $^ -lgtest_main -lgtest
 
 ${OBJDIR}/%.o : %.cpp ${OBJDIR}/.keep
 	${CXX} -MMD -std=c++0x ${CXXFLAGS} -I. -c -o $@ $<
