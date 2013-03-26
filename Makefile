@@ -3,39 +3,29 @@ CXX ?= g++
 CXXFLAGS ?= -O2 -g0 -Wall -Wextra -Weffc++ -Werror
 
 OBJDIR = .obj
-OBJECTS = ${patsubst core/%.cpp,${OBJDIR}/%.o,${wildcard core/*.cpp}}
-TEST_OBJECTS = ${patsubst unittest/%.cpp,${OBJDIR}/%.o,${wildcard unittest/*.cpp}}
-.PHONY: check install examples
+OBJECTS = ${patsubst %.cpp,${OBJDIR}/%.o,${wildcard *.cpp}}
+TEST_OBJECTS = ${patsubst check/%.cpp,${OBJDIR}/%.o,${wildcard check/*.cpp}}
+.PHONY: check install
 
-all: libtap.a
+all: xcom-converter
 
-check: libtap.a test
+check: test
 	./test --random=1
-
-install:
-	@echo TODO: implement
 
 clean:
 	rm -rf ${OBJDIR}
-	rm -f libtap.a test
-	make -C example/tcp $@
-	make -C example/http $@
+	rm -f xcom-converter test
 
-libtap.a: ${OBJECTS}
-	${AR} -r $@ $^
-	${AR} -s $@
+xcom-converter: ${OBJECTS}
+	${CXX} -o $@ $^
 
-test: ${TEST_OBJECTS} libtap.a
-	${CXX} -o $@ $^ -L. -ltap -lboost_unit_test_framework
+test: ${TEST_OBJECTS}
+	${CXX} -o $@ $^ -lboost_unit_test_framework
 
-examples: libtap.a
-	${MAKE} ${MAKEFLAGS} -C example/tcp
-	${MAKE} ${MAKEFLAGS} -C example/http
-
-${OBJDIR}/%.o : core/%.cpp ${OBJDIR}/.keep
+${OBJDIR}/%.o : %.cpp ${OBJDIR}/.keep
 	${CXX} -MMD -std=c++0x ${CXXFLAGS} -I. -c -o $@ $<
 
-${OBJDIR}/%.o : unittest/%.cpp ${OBJDIR}/.keep
+${OBJDIR}/%.o : check/%.cpp ${OBJDIR}/.keep
 	${CXX} -MMD -std=c++0x ${CXXFLAGS} -I. -c -o $@ $<
 
 ${OBJDIR}/.keep:
