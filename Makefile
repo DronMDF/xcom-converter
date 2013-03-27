@@ -10,7 +10,7 @@ TEST_OBJECTS = ${patsubst check/%.cpp,${OBJDIR}/%.o,${wildcard check/*.cpp}}
 all: xcom-converter
 
 check: test
-	./test --random=1
+	./test --gtest_shuffle
 
 clean:
 	rm -rf ${OBJDIR}
