@@ -17,20 +17,28 @@ int main(int, char **)
 	while(in) {
 		int c = in.get();
 		if (size == 0) {
+			for (int t = 0; t < c; t++) {
+				cout << endl;
+			}
 			size = c * 32;
 			continue;
 		}
 
 		if (c == 255) {
-			cout << "pic size " << size << endl;
+			cout << " pic size " << size << endl;
 			size = 0;
 			continue;
 		}
 
-		if (c == 254) {
-			size += in.get();
+		if (c == 0) {
+			cout << ' ';
 		} else {
-			size++;
+			cout << char('.' + c % 92);
+		}
+
+		size++;
+		if (size % 32 == 0) {
+			cout << endl;
 		}
 	}
 }
