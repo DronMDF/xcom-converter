@@ -4,7 +4,6 @@
 rle_streambuf::rle_streambuf(std::streambuf *sb)
 	: sb(sb), zero_counter(0)
 {
-	zero_counter = sb->sbumpc() * 32;
 }
 
 rle_streambuf::int_type rle_streambuf::underflow()
