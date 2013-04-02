@@ -1,9 +1,13 @@
 
 #include <fstream>
 #include <iostream>
+#include <vector>
+#include <boost/format.hpp>
 #include "rle_streambuf.h"
+#include "PngWriter.h"
 
 using namespace std;
+using namespace boost;
 
 int main(int, char **)
 {
@@ -12,33 +16,22 @@ int main(int, char **)
 	rle_streambuf rle(&inbuf);
 	istream in(&rle);
 
-	int size = 0;
-
+	int n = 1;
+	vector<uint8_t> image;
 	while(in) {
 		int c = in.get();
-		if (size == 0) {
-			for (int t = 0; t < c; t++) {
-				cout << endl;
-			}
-			size = c * 32;
+		if (image.empty()) {
+			image.assign(c * 32, 0);
 			continue;
 		}
 
-		if (c == 255) {
-			cout << " pic size " << size << endl;
-			size = 0;
+		if (c != 255) {
+			image.push_back(c);
 			continue;
 		}
 
-		if (c == 0) {
-			cout << ' ';
-		} else {
-			cout << char('.' + c % 92);
-		}
-
-		size++;
-		if (size % 32 == 0) {
-			cout << endl;
-		}
+		PngWriter writer(32, 40, image);
+		writer.save(str(format("XCOM_1_%1%.png") % n));
+		n++;
 	}
 }

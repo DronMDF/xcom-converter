@@ -17,16 +17,16 @@ clean:
 	rm -f xcom-converter test
 
 xcom-converter: ${OBJECTS}
-	${CXX} -pthread -o $@ $^
+	${CXX} -pthread `libpng-config --ldflags` -o $@ $^
 
 test: ${TEST_OBJECTS} ${OBJECTS}
 	${CXX} -pthread -o $@ $^ -lgtest_main -lgtest
 
 ${OBJDIR}/%.o : %.cpp ${OBJDIR}/.keep
-	${CXX} -MMD -std=c++0x ${CXXFLAGS} -I. -c -o $@ $<
+	${CXX} -MMD -std=c++0x ${CXXFLAGS} -I. `libpng-config --cflags` -c -o $@ $<
 
 ${OBJDIR}/%.o : check/%.cpp ${OBJDIR}/.keep
-	${CXX} -MMD -std=c++0x ${CXXFLAGS} -I. -c -o $@ $<
+	${CXX} -MMD -std=c++0x ${CXXFLAGS} -I. `libpng-config --cflags` -c -o $@ $<
 
 ${OBJDIR}/.keep:
 	test -d ${OBJDIR} || mkdir ${OBJDIR}
