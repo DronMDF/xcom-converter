@@ -17,10 +17,10 @@ clean:
 	rm -f xcom-converter test
 
 xcom-converter: ${OBJECTS}
-	${CXX} -pthread `libpng-config --ldflags` -o $@ $^
+	${CXX} -pthread -o $@ $^ `libpng-config --ldflags`
 
 test: ${TEST_OBJECTS} ${OBJECTS}
-	${CXX} -pthread -o $@ $^ -lgtest_main -lgtest
+	${CXX} -pthread -o $@ $^ -lgtest_main -lgtest `libpng-config --ldflags`
 
 ${OBJDIR}/%.o : %.cpp ${OBJDIR}/.keep
 	${CXX} -MMD -std=c++0x ${CXXFLAGS} -I. `libpng-config --cflags` -c -o $@ $<

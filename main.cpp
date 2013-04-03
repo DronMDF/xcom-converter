@@ -20,6 +20,10 @@ int main(int, char **)
 	vector<uint8_t> image;
 	while(in) {
 		int c = in.get();
+		if (c == char_traits<char>::eof()) {
+			break;
+		}
+
 		if (image.empty()) {
 			image.assign(c * 32, 0);
 			continue;
@@ -33,5 +37,6 @@ int main(int, char **)
 		PngWriter writer(32, 40, image);
 		writer.save(str(format("XCOM_1_%1%.png") % n));
 		n++;
+		image.clear();
 	}
 }
