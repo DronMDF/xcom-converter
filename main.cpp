@@ -65,7 +65,7 @@ int main(int, char **)
 		}
 
 		PngWriter writer(32, 40, image);
-		writer.save(str(format("XCOM_1_%1%.png") % n));
+		writer.save(str(format("XCOM_1_%1%.png") % n), palette2);
 		n++;
 		image.clear();
 	}
