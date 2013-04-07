@@ -33,16 +33,10 @@ vector<array<uint8_t, 3>> loadPalette(const string &filename, int offset, int nc
 	return palette;
 }
 
-int main(int, char **)
+void convertPCK(const string &filename, int width, int height, const vector<array<uint8_t, 3>> &palette)
 {
-	const auto palette1 = loadPalette("/home/dron/openxcom/share/openxcom/data/GEODATA/PALETTES.DAT", 0, 256);
-	const auto palette2 = loadPalette("/home/dron/openxcom/share/openxcom/data/GEODATA/PALETTES.DAT", 774, 256);
-	const auto palette3 = loadPalette("/home/dron/openxcom/share/openxcom/data/GEODATA/PALETTES.DAT", 1548, 256);
-	const auto palette4 = loadPalette("/home/dron/openxcom/share/openxcom/data/GEODATA/PALETTES.DAT", 2322, 256);
-	const auto palette5 = loadPalette("/home/dron/openxcom/share/openxcom/data/GEODATA/BACKPALS.DAT", 0, 128);
-
 	filebuf inbuf;
-	inbuf.open("/home/dron/openxcom/share/openxcom/data/UNITS/XCOM_1.PCK", ios::in | ios::binary);
+	inbuf.open(filename.c_str(), ios::in | ios::binary);
 	rle_streambuf rle(&inbuf);
 	istream in(&rle);
 
@@ -55,7 +49,7 @@ int main(int, char **)
 		}
 
 		if (image.empty()) {
-			image.assign(c * 32, 0);
+			image.assign(c * width, 0);
 			continue;
 		}
 
@@ -64,9 +58,20 @@ int main(int, char **)
 			continue;
 		}
 
-		PngWriter writer(32, 40, image);
-		writer.save(str(format("XCOM_1_%1%.png") % n), palette2);
+		PngWriter writer(width, height, image);
+		writer.save(str(format("XCOM_1_%1%.png") % n), palette);
 		n++;
 		image.clear();
 	}
+}
+
+int main(int argc, char **argv)
+{
+	const auto palette1 = loadPalette("/home/dron/openxcom/share/openxcom/data/GEODATA/PALETTES.DAT", 0, 256);
+	const auto palette2 = loadPalette("/home/dron/openxcom/share/openxcom/data/GEODATA/PALETTES.DAT", 774, 256);
+	const auto palette3 = loadPalette("/home/dron/openxcom/share/openxcom/data/GEODATA/PALETTES.DAT", 1548, 256);
+	const auto palette4 = loadPalette("/home/dron/openxcom/share/openxcom/data/GEODATA/PALETTES.DAT", 2322, 256);
+	const auto palette5 = loadPalette("/home/dron/openxcom/share/openxcom/data/GEODATA/BACKPALS.DAT", 0, 128);
+
+	convertPCK("/home/dron/openxcom/share/openxcom/data/UNITS/XCOM_1.PCK", 32, 40, palette2);
 }
