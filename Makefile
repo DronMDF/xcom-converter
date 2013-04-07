@@ -17,7 +17,7 @@ clean:
 	rm -f xcom-converter test
 
 xcom-converter: ${OBJECTS}
-	${CXX} -pthread -o $@ $^ `libpng-config --ldflags`
+	${CXX} -pthread -o $@ $^ `libpng-config --ldflags` -lboost_filesystem -lboost_system
 
 test: ${TEST_OBJECTS} ${OBJECTS}
 	${CXX} -pthread -o $@ $^ -lgtest_main -lgtest `libpng-config --ldflags`

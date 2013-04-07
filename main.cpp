@@ -4,11 +4,13 @@
 #include <iostream>
 #include <vector>
 #include <boost/format.hpp>
+#include <boost/filesystem.hpp>
 #include "rle_streambuf.h"
 #include "PngWriter.h"
 
 using namespace std;
 using namespace boost;
+using namespace boost::filesystem3;
 
 vector<array<uint8_t, 3>> loadPalette(const string &filename, int offset, int ncolors)
 {
@@ -33,8 +35,16 @@ vector<array<uint8_t, 3>> loadPalette(const string &filename, int offset, int nc
 	return palette;
 }
 
-void convertPCK(const string &filename, int width, int height, const vector<array<uint8_t, 3>> &palette)
+void convertPCK(const string &filename, int width, int height,
+		const vector<array<uint8_t, 3>> &palette, const string &outdir)
 {
+	const string base = path(filename).stem().string();
+	const auto outpath = outdir + "/" + base;
+
+	if (!exists(outpath)) {
+		create_directory(outpath);
+	}
+
 	filebuf inbuf;
 	inbuf.open(filename.c_str(), ios::in | ios::binary);
 	rle_streambuf rle(&inbuf);
@@ -59,7 +69,7 @@ void convertPCK(const string &filename, int width, int height, const vector<arra
 		}
 
 		PngWriter writer(width, height, image);
-		writer.save(str(format("XCOM_1_%1%.png") % n), palette);
+		writer.save(str(format("%1%/%2%_%3$04d.png") % outpath % base % n), palette);
 		n++;
 		image.clear();
 	}
@@ -67,11 +77,21 @@ void convertPCK(const string &filename, int width, int height, const vector<arra
 
 int main(int argc, char **argv)
 {
-	const auto palette1 = loadPalette("/home/dron/openxcom/share/openxcom/data/GEODATA/PALETTES.DAT", 0, 256);
-	const auto palette2 = loadPalette("/home/dron/openxcom/share/openxcom/data/GEODATA/PALETTES.DAT", 774, 256);
-	const auto palette3 = loadPalette("/home/dron/openxcom/share/openxcom/data/GEODATA/PALETTES.DAT", 1548, 256);
-	const auto palette4 = loadPalette("/home/dron/openxcom/share/openxcom/data/GEODATA/PALETTES.DAT", 2322, 256);
-	const auto palette5 = loadPalette("/home/dron/openxcom/share/openxcom/data/GEODATA/BACKPALS.DAT", 0, 128);
+	if (argc < 2) {
+		cout << argv[0] << " <xcom_dir> [<out_dir>]" << endl;
+		return -1;
+	}
 
-	convertPCK("/home/dron/openxcom/share/openxcom/data/UNITS/XCOM_1.PCK", 32, 40, palette2);
+	const string xdir = argv[1];
+	const string outdir = (argc > 2) ? argv[2] : ".";
+
+	const auto palette1 = loadPalette(xdir + "/GEODATA/PALETTES.DAT", 0, 256);
+	const auto palette2 = loadPalette(xdir + "/GEODATA/PALETTES.DAT", 774, 256);
+	const auto palette3 = loadPalette(xdir + "/GEODATA/PALETTES.DAT", 1548, 256);
+	const auto palette4 = loadPalette(xdir + "/GEODATA/PALETTES.DAT", 2322, 256);
+	const auto palette5 = loadPalette(xdir + "/GEODATA/BACKPALS.DAT", 0, 128);
+
+	convertPCK(xdir + "/UNITS/XCOM_1.PCK", 32, 40, palette2, outdir);
+
+	return 0;
 }
