@@ -91,7 +91,42 @@ int main(int argc, char **argv)
 	const auto palette4 = loadPalette(xdir + "/GEODATA/PALETTES.DAT", 2322, 256);
 	const auto palette5 = loadPalette(xdir + "/GEODATA/BACKPALS.DAT", 0, 128);
 
+	convertPCK(xdir + "GEOGRAPH/BASEBITS.PCK", 32, 40, palette2, outdir);
+	convertPCK(xdir + "GEOGRAPH/INTICON.PCK", 32, 40, palette2, outdir);
+	convertPCK(xdir + "/TERRAIN/BLANKS.PCK", 32, 40, palette2, outdir);
+	convertPCK(xdir + "/UFOGRAPH/CURSOR.PCK", 32, 40, palette2, outdir);
+	convertPCK(xdir + "/UFOGRAPH/HIT.PCK", 32, 40, palette2, outdir);
+	convertPCK(xdir + "/UFOGRAPH/SMOKE.PCK", 32, 40, palette2, outdir);
+	convertPCK(xdir + "/UFOGRAPH/X1.PCK", 128, 64, palette2, outdir);
+	convertPCK(xdir + "/UNITS/BIGOBS.PCK", 32, 48, palette2, outdir);
+	convertPCK(xdir + "/UNITS/CELATID.PCK", 32, 40, palette2, outdir);
+	convertPCK(xdir + "/UNITS/CHRYS.PCK", 32, 40, palette2, outdir);
+	convertPCK(xdir + "/UNITS/CIVF.PCK", 32, 40, palette2, outdir);
+	convertPCK(xdir + "/UNITS/CIVM.PCK", 32, 40, palette2, outdir);
+	convertPCK(xdir + "/UNITS/CYBER.PCK", 32, 40, palette2, outdir);
+	convertPCK(xdir + "/UNITS/ETHEREAL.PCK", 32, 40, palette2, outdir);
+	convertPCK(xdir + "/UNITS/FLOATER.PCK", 32, 40, palette2, outdir);
+	convertPCK(xdir + "/UNITS/FLOOROB.PCK", 32, 40, palette2, outdir);
+	convertPCK(xdir + "/UNITS/HANDOB.PCK", 32, 40, palette2, outdir);
+	convertPCK(xdir + "/UNITS/MUTON.PCK", 32, 40, palette2, outdir);
+	convertPCK(xdir + "/UNITS/SECTOID.PCK", 32, 40, palette2, outdir);
+	convertPCK(xdir + "/UNITS/SILACOID.PCK", 32, 40, palette2, outdir);
+	convertPCK(xdir + "/UNITS/SNAKEMAN.PCK", 32, 40, palette2, outdir);
+	convertPCK(xdir + "/UNITS/TANKS.PCK", 32, 40, palette2, outdir);
+	convertPCK(xdir + "/UNITS/XCOM_0.PCK", 32, 40, palette2, outdir);
 	convertPCK(xdir + "/UNITS/XCOM_1.PCK", 32, 40, palette2, outdir);
+	convertPCK(xdir + "/UNITS/XCOM_2.PCK", 32, 40, palette2, outdir);
+	convertPCK(xdir + "/UNITS/X_REAP.PCK", 32, 40, palette2, outdir);
+	convertPCK(xdir + "/UNITS/X_ROB.PCK", 32, 40, palette2, outdir);
+	convertPCK(xdir + "/UNITS/ZOMBIE.PCK", 32, 40, palette2, outdir);
+
+	// Это SPK
+	//convertPCK(xdir + "UFOGRAPH/DETBORD.PCK", 320, 200, palette2, outdir);
+	//convertPCK(xdir + "UFOGRAPH/DETBORD2.PCK", 320, 200, palette2, outdir);
+	//convertPCK(xdir + "UFOGRAPH/ICONS.PCK", 320, 200, palette2, outdir);
+	//convertPCK(xdir + "UFOGRAPH/MEDIBORD.PCK", 320, 200, palette2, outdir);
+	//convertPCK(xdir + "UFOGRAPH/SCANBORD.PCK", 320, 200, palette2, outdir);
+	//convertPCK(xdir + "UFOGRAPH/UNIBORD.PCK", 320, 200, palette2, outdir);
 
 	return 0;
 }
