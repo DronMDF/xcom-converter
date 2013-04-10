@@ -38,6 +38,8 @@ vector<array<uint8_t, 3>> loadPalette(const string &filename, int offset, int nc
 void convertPCK(const string &filename, int width, int height,
 		const vector<array<uint8_t, 3>> &palette, const string &outdir)
 {
+	cout << "Parse " << filename << endl;
+
 	const string base = path(filename).stem().string();
 	const auto outpath = outdir + "/" + base;
 
@@ -78,6 +80,8 @@ void convertPCK(const string &filename, int width, int height,
 void convertDAT(const string &filename, int width, int height,
 		const vector<array<uint8_t, 3>> &palette, const string &outdir)
 {
+	cout << "Parse " << filename << endl;
+
 	const string base = path(filename).stem().string();
 	const auto outpath = outdir + "/" + base;
 
@@ -105,16 +109,14 @@ void convertDAT(const string &filename, int width, int height,
 void convertSCR(const string &filename, int width, int height,
 		const vector<array<uint8_t, 3>> &palette, const string &outdir)
 {
+	cout << "Parse " << filename << endl;
+
 	const string base = path(filename).stem().string();
 	ifstream in(filename.c_str(), ios::in | ios::binary);
 
 	vector<uint8_t> image(width * height);
-	while(in) {
+	if (in) {
 		in.read(reinterpret_cast<char *>(&image[0]), image.size());
-
-		if (!in) {
-			break;
-		}
 
 		PngWriter writer(width, height, image);
 		writer.save(str(format("%1%/%2%.png") % outdir % base), palette);
@@ -173,33 +175,35 @@ int main(int argc, char **argv)
 
 	// Это SCR
 	convertSCR(xdir + "/UFOGRAPH/TAC00.SCR", 320, 200, palette2, outdir);
-	convertSCR(xdir + "/UFOGRAPH/TAC01.SCR", 320, 200, palette2, outdir);
-	convertSCR(xdir + "/UFOGRAPH/DETBORD.PCK", 320, 200, palette2, outdir);
-	convertSCR(xdir + "/UFOGRAPH/DETBORD2.PCK", 320, 200, palette2, outdir);
-	convertSCR(xdir + "/UFOGRAPH/ICONS.PCK", 320, 200, palette2, outdir);
-	convertSCR(xdir + "/UFOGRAPH/MEDIBORD.PCK", 320, 200, palette2, outdir);
-	convertSCR(xdir + "/UFOGRAPH/SCANBORD.PCK", 320, 200, palette2, outdir);
-	convertSCR(xdir + "/UFOGRAPH/UNIBORD.PCK", 320, 200, palette2, outdir);
-	convertSCR(xdir + "/GEODATA/INTERWIN.DAT", 160, 556, palette2, outdir);
-	convertSCR(xdir + "/GEOGRAPH/BACK01.SCR", 320, 200, palette2, outdir);
-	convertSCR(xdir + "/GEOGRAPH/BACK02.SCR", 320, 200, palette2, outdir);
-	convertSCR(xdir + "/GEOGRAPH/BACK03.SCR", 320, 200, palette2, outdir);
-	convertSCR(xdir + "/GEOGRAPH/BACK04.SCR", 320, 200, palette2, outdir);
-	convertSCR(xdir + "/GEOGRAPH/BACK05.SCR", 320, 200, palette2, outdir);
+	convertSCR(xdir + "/GEODATA/INTERWIN.DAT", 160, 556, palette1, outdir);
+	convertSCR(xdir + "/GEOGRAPH/BACK01.SCR", 320, 200, palette1, outdir);
+	convertSCR(xdir + "/GEOGRAPH/BACK02.SCR", 320, 200, palette1, outdir);
+	convertSCR(xdir + "/GEOGRAPH/BACK03.SCR", 320, 200, palette1, outdir);
+	convertSCR(xdir + "/GEOGRAPH/BACK04.SCR", 320, 200, palette1, outdir);
+	convertSCR(xdir + "/GEOGRAPH/BACK05.SCR", 320, 200, palette1, outdir);
 	convertSCR(xdir + "/GEOGRAPH/BACK06.SCR", 320, 200, palette2, outdir);
 	convertSCR(xdir + "/GEOGRAPH/BACK07.SCR", 320, 200, palette2, outdir);
 	convertSCR(xdir + "/GEOGRAPH/BACK08.SCR", 320, 200, palette2, outdir);
 	convertSCR(xdir + "/GEOGRAPH/BACK09.SCR", 320, 200, palette2, outdir);
 	convertSCR(xdir + "/GEOGRAPH/BACK10.SCR", 320, 200, palette2, outdir);
-	convertSCR(xdir + "/GEOGRAPH/BACK11.SCR", 320, 200, palette2, outdir);
-	convertSCR(xdir + "/GEOGRAPH/BACK12.SCR", 320, 200, palette2, outdir);
-	convertSCR(xdir + "/GEOGRAPH/BACK13.SCR", 320, 200, palette2, outdir);
-	convertSCR(xdir + "/GEOGRAPH/BACK14.SCR", 320, 200, palette2, outdir);
-	convertSCR(xdir + "/GEOGRAPH/BACK15.SCR", 320, 200, palette2, outdir);
-	convertSCR(xdir + "/GEOGRAPH/BACK16.SCR", 320, 200, palette2, outdir);
-	convertSCR(xdir + "/GEOGRAPH/BACK17.SCR", 320, 200, palette2, outdir);
-	convertSCR(xdir + "/GEOGRAPH/GEOBORD.SCR", 320, 200, palette2, outdir);
-	convertSCR(xdir + "/GEOGRAPH/UP_BORD2.SCR", 320, 200, palette2, outdir);
+	convertSCR(xdir + "/GEOGRAPH/BACK11.SCR", 320, 200, palette1, outdir);
+	convertSCR(xdir + "/GEOGRAPH/BACK12.SCR", 320, 200, palette1, outdir);
+	convertSCR(xdir + "/GEOGRAPH/BACK13.SCR", 320, 200, palette1, outdir);
+	convertSCR(xdir + "/GEOGRAPH/BACK14.SCR", 320, 200, palette1, outdir);
+	convertSCR(xdir + "/GEOGRAPH/BACK15.SCR", 320, 200, palette1, outdir);
+	convertSCR(xdir + "/GEOGRAPH/BACK16.SCR", 320, 200, palette1, outdir);
+	convertSCR(xdir + "/GEOGRAPH/BACK17.SCR", 320, 200, palette1, outdir);
+	convertSCR(xdir + "/GEOGRAPH/GEOBORD.SCR", 320, 200, palette1, outdir);
+	convertSCR(xdir + "/GEOGRAPH/UP_BORD2.SCR", 320, 200, palette1, outdir);
+
+	// Это SPK
+	//convertSCR(xdir + "/UFOGRAPH/TAC01.SCR", 320, 200, palette2, outdir);
+	//convertSCR(xdir + "/UFOGRAPH/DETBORD.PCK", 320, 200, palette1, outdir);
+	//convertSCR(xdir + "/UFOGRAPH/DETBORD2.PCK", 320, 200, palette1, outdir);
+	//convertSCR(xdir + "/UFOGRAPH/ICONS.PCK", 320, 200, palette1, outdir);
+	//convertSCR(xdir + "/UFOGRAPH/MEDIBORD.PCK", 320, 200, palette1, outdir);
+	//convertSCR(xdir + "/UFOGRAPH/SCANBORD.PCK", 320, 200, palette1, outdir);
+	//convertSCR(xdir + "/UFOGRAPH/UNIBORD.PCK", 320, 200, palette1, outdir);
 
 	return 0;
 }
