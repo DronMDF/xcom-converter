@@ -123,6 +123,47 @@ void convertSCR(const string &filename, int width, int height,
 	}
 }
 
+void convertSPK(const string &filename, int width, int height,
+		const vector<array<uint8_t, 3>> &palette, const string &outdir)
+{
+	cout << "Parse " << filename << endl;
+
+	const string base = path(filename).stem().string();
+	ifstream in(filename.c_str(), ios::in | ios::binary);
+
+	vector<uint8_t> image;
+	while (in) {
+		uint16_t flag;
+		in.read(reinterpret_cast<char *>(&flag), sizeof(flag));
+
+		if (flag == 65533) {
+			break;
+		}
+
+		if (flag == 65534) {
+			uint16_t count;
+			in.read(reinterpret_cast<char *>(&count), sizeof(count));
+			for (int i = 0; i < count * 2; ++i) {
+				int value = in.get();
+				if (value != char_traits<char>::eof()) {
+					image.push_back(value);
+				}
+			}
+		}
+
+		if (flag == 65535) {
+			uint16_t count;
+			in.read(reinterpret_cast<char *>(&count), sizeof(count));
+			for (int i = 0; i < count * 2; ++i) {
+				image.push_back(0);
+			}
+		}
+	}
+
+	PngWriter writer(width, height, image);
+	writer.save(str(format("%1%/%2%.png") % outdir % base), palette);
+}
+
 int main(int argc, char **argv)
 {
 	if (argc < 2) {
@@ -142,11 +183,37 @@ int main(int argc, char **argv)
 
 	convertPCK(xdir + "/GEOGRAPH/BASEBITS.PCK", 32, 40, palette2, outdir);
 	convertPCK(xdir + "/GEOGRAPH/INTICON.PCK", 32, 40, palette2, outdir);
-	convertPCK(xdir + "/TERRAIN/BLANKS.PCK", 32, 40, palette2, outdir);
-	convertPCK(xdir + "/UFOGRAPH/CURSOR.PCK", 32, 40, palette2, outdir);
-	convertPCK(xdir + "/UFOGRAPH/HIT.PCK", 32, 40, palette2, outdir);
-	convertPCK(xdir + "/UFOGRAPH/SMOKE.PCK", 32, 40, palette2, outdir);
-	convertPCK(xdir + "/UFOGRAPH/X1.PCK", 128, 64, palette2, outdir);
+	convertPCK(xdir + "/TERRAIN/AVENGER.PCK", 32, 40, palette5, outdir);
+	convertPCK(xdir + "/TERRAIN/BARN.PCK", 32, 40, palette5, outdir);
+	convertPCK(xdir + "/TERRAIN/BLANKS.PCK", 32, 40, palette5, outdir);
+	convertPCK(xdir + "/TERRAIN/BRAIN.PCK", 32, 40, palette5, outdir);
+	convertPCK(xdir + "/TERRAIN/CULTIVAT.PCK", 32, 40, palette5, outdir);
+	convertPCK(xdir + "/TERRAIN/DESERT.PCK", 32, 40, palette5, outdir);
+	convertPCK(xdir + "/TERRAIN/FOREST.PCK", 32, 40, palette5, outdir);
+	convertPCK(xdir + "/TERRAIN/FRNITURE.PCK", 32, 40, palette5, outdir);
+	convertPCK(xdir + "/TERRAIN/JUNGLE.PCK", 32, 40, palette5, outdir);
+	convertPCK(xdir + "/TERRAIN/LIGHTNIN.PCK", 32, 40, palette5, outdir);
+	convertPCK(xdir + "/TERRAIN/MARS.PCK", 32, 40, palette5, outdir);
+	convertPCK(xdir + "/TERRAIN/MOUNT.PCK", 32, 40, palette5, outdir);
+	convertPCK(xdir + "/TERRAIN/PLANE.PCK", 32, 40, palette5, outdir);
+	convertPCK(xdir + "/TERRAIN/POLAR.PCK", 32, 40, palette5, outdir);
+	convertPCK(xdir + "/TERRAIN/ROADS.PCK", 32, 40, palette5, outdir);
+	convertPCK(xdir + "/TERRAIN/U_BASE.PCK", 32, 40, palette5, outdir);
+	convertPCK(xdir + "/TERRAIN/U_BITS.PCK", 32, 40, palette5, outdir);
+	convertPCK(xdir + "/TERRAIN/U_DISEC2.PCK", 32, 40, palette5, outdir);
+	convertPCK(xdir + "/TERRAIN/U_EXT02.PCK", 32, 40, palette5, outdir);
+	convertPCK(xdir + "/TERRAIN/UFO1.PCK", 32, 40, palette5, outdir);
+	convertPCK(xdir + "/TERRAIN/U_OPER2.PCK", 32, 40, palette5, outdir);
+	convertPCK(xdir + "/TERRAIN/U_PODS.PCK", 32, 40, palette5, outdir);
+	convertPCK(xdir + "/TERRAIN/URBAN.PCK", 32, 40, palette5, outdir);
+	convertPCK(xdir + "/TERRAIN/URBITS.PCK", 32, 40, palette5, outdir);
+	convertPCK(xdir + "/TERRAIN/U_WALL02.PCK", 32, 40, palette5, outdir);
+	convertPCK(xdir + "/TERRAIN/XBASE1.PCK", 32, 40, palette5, outdir);
+	convertPCK(xdir + "/TERRAIN/XBASE2.PCK", 32, 40, palette5, outdir);
+	convertPCK(xdir + "/UFOGRAPH/CURSOR.PCK", 32, 40, palette5, outdir);
+	convertPCK(xdir + "/UFOGRAPH/HIT.PCK", 32, 40, palette5, outdir);
+	convertPCK(xdir + "/UFOGRAPH/SMOKE.PCK", 32, 40, palette5, outdir);
+	convertPCK(xdir + "/UFOGRAPH/X1.PCK", 128, 64, palette5, outdir);
 	convertPCK(xdir + "/UNITS/BIGOBS.PCK", 32, 48, palette2, outdir);
 	convertPCK(xdir + "/UNITS/CELATID.PCK", 32, 40, palette5, outdir);
 	convertPCK(xdir + "/UNITS/CHRYS.PCK", 32, 40, palette5, outdir);
@@ -198,13 +265,75 @@ int main(int argc, char **argv)
 	convertSCR(xdir + "/GEOGRAPH/UP_BORD2.SCR", 320, 200, palette1, outdir);
 
 	// Это SPK
-	//convertSCR(xdir + "/UFOGRAPH/TAC01.SCR", 320, 200, palette2, outdir);
-	//convertSCR(xdir + "/UFOGRAPH/DETBORD.PCK", 320, 200, palette1, outdir);
-	//convertSCR(xdir + "/UFOGRAPH/DETBORD2.PCK", 320, 200, palette1, outdir);
-	//convertSCR(xdir + "/UFOGRAPH/ICONS.PCK", 320, 200, palette1, outdir);
-	//convertSCR(xdir + "/UFOGRAPH/MEDIBORD.PCK", 320, 200, palette1, outdir);
-	//convertSCR(xdir + "/UFOGRAPH/SCANBORD.PCK", 320, 200, palette1, outdir);
-	//convertSCR(xdir + "/UFOGRAPH/UNIBORD.PCK", 320, 200, palette1, outdir);
+	convertSPK(xdir + "/UFOGRAPH/TAC01.SCR", 320, 200, palette2, outdir);
+	convertSPK(xdir + "/UFOGRAPH/DETBORD.PCK", 320, 200, palette5, outdir);
+	convertSPK(xdir + "/UFOGRAPH/DETBORD2.PCK", 320, 200, palette5, outdir);
+	convertSPK(xdir + "/UFOGRAPH/ICONS.PCK", 320, 200, palette5, outdir);
+	convertSPK(xdir + "/UFOGRAPH/MEDIBORD.PCK", 320, 200, palette5, outdir);
+	convertSPK(xdir + "/UFOGRAPH/SCANBORD.PCK", 320, 200, palette5, outdir);
+	convertSPK(xdir + "/UFOGRAPH/UNIBORD.PCK", 320, 200, palette5, outdir);
+	convertSPK(xdir + "/GEOGRAPH/UP001.SPK", 320, 200, palette4, outdir);
+	convertSPK(xdir + "/GEOGRAPH/UP002.SPK", 320, 200, palette4, outdir);
+	convertSPK(xdir + "/GEOGRAPH/UP003.SPK", 320, 200, palette4, outdir);
+	convertSPK(xdir + "/GEOGRAPH/UP004.SPK", 320, 200, palette4, outdir);
+	convertSPK(xdir + "/GEOGRAPH/UP005.SPK", 320, 200, palette4, outdir);
+	convertSPK(xdir + "/GEOGRAPH/UP006.SPK", 320, 200, palette4, outdir);
+	convertSPK(xdir + "/GEOGRAPH/UP007.SPK", 320, 200, palette4, outdir);
+	convertSPK(xdir + "/GEOGRAPH/UP008.SPK", 320, 200, palette4, outdir);
+	convertSPK(xdir + "/GEOGRAPH/UP009.SPK", 320, 200, palette4, outdir);
+	convertSPK(xdir + "/GEOGRAPH/UP010.SPK", 320, 200, palette4, outdir);
+	convertSPK(xdir + "/GEOGRAPH/UP011.SPK", 320, 200, palette4, outdir);
+	convertSPK(xdir + "/GEOGRAPH/UP012.SPK", 320, 200, palette4, outdir);
+	convertSPK(xdir + "/GEOGRAPH/UP013.SPK", 320, 200, palette4, outdir);
+	convertSPK(xdir + "/GEOGRAPH/UP014.SPK", 320, 200, palette4, outdir);
+	convertSPK(xdir + "/GEOGRAPH/UP015.SPK", 320, 200, palette4, outdir);
+	convertSPK(xdir + "/GEOGRAPH/UP016.SPK", 320, 200, palette4, outdir);
+	convertSPK(xdir + "/GEOGRAPH/UP017.SPK", 320, 200, palette4, outdir);
+	convertSPK(xdir + "/GEOGRAPH/UP018.SPK", 320, 200, palette4, outdir);
+	convertSPK(xdir + "/GEOGRAPH/UP019.SPK", 320, 200, palette4, outdir);
+	convertSPK(xdir + "/GEOGRAPH/UP020.SPK", 320, 200, palette4, outdir);
+	convertSPK(xdir + "/GEOGRAPH/UP021.SPK", 320, 200, palette4, outdir);
+	convertSPK(xdir + "/GEOGRAPH/UP022.SPK", 320, 200, palette4, outdir);
+	convertSPK(xdir + "/GEOGRAPH/UP023.SPK", 320, 200, palette4, outdir);
+	convertSPK(xdir + "/GEOGRAPH/UP024.SPK", 320, 200, palette4, outdir);
+	convertSPK(xdir + "/GEOGRAPH/UP025.SPK", 320, 200, palette4, outdir);
+	convertSPK(xdir + "/GEOGRAPH/UP026.SPK", 320, 200, palette4, outdir);
+	convertSPK(xdir + "/GEOGRAPH/UP027.SPK", 320, 200, palette4, outdir);
+	convertSPK(xdir + "/GEOGRAPH/UP028.SPK", 320, 200, palette4, outdir);
+	convertSPK(xdir + "/GEOGRAPH/UP029.SPK", 320, 200, palette4, outdir);
+	convertSPK(xdir + "/GEOGRAPH/UP030.SPK", 320, 200, palette4, outdir);
+	convertSPK(xdir + "/GEOGRAPH/UP031.SPK", 320, 200, palette4, outdir);
+	convertSPK(xdir + "/GEOGRAPH/UP032.SPK", 320, 200, palette4, outdir);
+	convertSPK(xdir + "/GEOGRAPH/UP033.SPK", 320, 200, palette4, outdir);
+	convertSPK(xdir + "/GEOGRAPH/UP034.SPK", 320, 200, palette4, outdir);
+	convertSPK(xdir + "/GEOGRAPH/UP035.SPK", 320, 200, palette4, outdir);
+	convertSPK(xdir + "/GEOGRAPH/UP036.SPK", 320, 200, palette4, outdir);
+	convertSPK(xdir + "/GEOGRAPH/UP037.SPK", 320, 200, palette4, outdir);
+	convertSPK(xdir + "/GEOGRAPH/UP038.SPK", 320, 200, palette4, outdir);
+	convertSPK(xdir + "/GEOGRAPH/UP039.SPK", 320, 200, palette4, outdir);
+	convertSPK(xdir + "/GEOGRAPH/UP040.SPK", 320, 200, palette4, outdir);
+	convertSPK(xdir + "/GEOGRAPH/UP041.SPK", 320, 200, palette4, outdir);
+	convertSPK(xdir + "/GEOGRAPH/UP042.SPK", 320, 200, palette4, outdir);
+	convertSPK(xdir + "/GEOGRAPH/GRAPHS.SPK", 320, 200, palette5, outdir);
+
+	convertSPK(xdir + "/UFOGRAPH/MAN_0F0.SPK", 320, 200, palette5, outdir);
+	convertSPK(xdir + "/UFOGRAPH/MAN_0F1.SPK", 320, 200, palette5, outdir);
+	convertSPK(xdir + "/UFOGRAPH/MAN_0F2.SPK", 320, 200, palette5, outdir);
+	convertSPK(xdir + "/UFOGRAPH/MAN_0F3.SPK", 320, 200, palette5, outdir);
+	convertSPK(xdir + "/UFOGRAPH/MAN_0M0.SPK", 320, 200, palette5, outdir);
+	convertSPK(xdir + "/UFOGRAPH/MAN_0M1.SPK", 320, 200, palette5, outdir);
+	convertSPK(xdir + "/UFOGRAPH/MAN_0M2.SPK", 320, 200, palette5, outdir);
+	convertSPK(xdir + "/UFOGRAPH/MAN_0M3.SPK", 320, 200, palette5, outdir);
+	convertSPK(xdir + "/UFOGRAPH/MAN_1F0.SPK", 320, 200, palette5, outdir);
+	convertSPK(xdir + "/UFOGRAPH/MAN_1F1.SPK", 320, 200, palette5, outdir);
+	convertSPK(xdir + "/UFOGRAPH/MAN_1F2.SPK", 320, 200, palette5, outdir);
+	convertSPK(xdir + "/UFOGRAPH/MAN_1F3.SPK", 320, 200, palette5, outdir);
+	convertSPK(xdir + "/UFOGRAPH/MAN_1M0.SPK", 320, 200, palette5, outdir);
+	convertSPK(xdir + "/UFOGRAPH/MAN_1M1.SPK", 320, 200, palette5, outdir);
+	convertSPK(xdir + "/UFOGRAPH/MAN_1M2.SPK", 320, 200, palette5, outdir);
+	convertSPK(xdir + "/UFOGRAPH/MAN_1M3.SPK", 320, 200, palette5, outdir);
+	convertSPK(xdir + "/UFOGRAPH/MAN_2.SPK", 320, 200, palette5, outdir);
+	convertSPK(xdir + "/UFOGRAPH/MAN_3.SPK", 320, 200, palette5, outdir);
 
 	return 0;
 }
