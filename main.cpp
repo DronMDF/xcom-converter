@@ -10,7 +10,7 @@
 
 using namespace std;
 using namespace boost;
-using namespace boost::filesystem3;
+using namespace boost::filesystem;
 
 vector<array<uint8_t, 3>> loadPalette(const string &filename, int offset, int ncolors)
 {
@@ -214,7 +214,7 @@ int main(int argc, char **argv)
 	convertPCK(xdir + "/UFOGRAPH/HIT.PCK", 32, 40, palette5, outdir);
 	convertPCK(xdir + "/UFOGRAPH/SMOKE.PCK", 32, 40, palette5, outdir);
 	convertPCK(xdir + "/UFOGRAPH/X1.PCK", 128, 64, palette5, outdir);
-	convertPCK(xdir + "/UNITS/BIGOBS.PCK", 32, 48, palette2, outdir);
+	convertPCK(xdir + "/UNITS/BIGOBS.PCK", 32, 48, palette5, outdir);
 	convertPCK(xdir + "/UNITS/CELATID.PCK", 32, 40, palette5, outdir);
 	convertPCK(xdir + "/UNITS/CHRYS.PCK", 32, 40, palette5, outdir);
 	convertPCK(xdir + "/UNITS/CIVF.PCK", 32, 40, palette5, outdir);
