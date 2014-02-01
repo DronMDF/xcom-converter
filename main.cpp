@@ -10,7 +10,7 @@
 
 using namespace std;
 using namespace boost;
-using namespace boost::filesystem3;
+using namespace boost::filesystem;
 
 vector<array<uint8_t, 3>> loadPalette(const string &filename, int offset, int ncolors)
 {
@@ -137,36 +137,50 @@ int main(int argc, char **argv)
 	const auto palette2 = loadPalette(xdir + "/GEODATA/PALETTES.DAT", 774, 256);
 	const auto palette3 = loadPalette(xdir + "/GEODATA/PALETTES.DAT", 1548, 256);
 	const auto palette4 = loadPalette(xdir + "/GEODATA/PALETTES.DAT", 2322, 256);
-	const auto palette5 = loadPalette(xdir + "/GEODATA/BACKPALS.DAT", 0, 128);
+	const auto palette5 = loadPalette(xdir + "/GEODATA/PALETTES.DAT", 3096, 256);
+	const auto palette_back = loadPalette(xdir + "/GEODATA/BACKPALS.DAT", 0, 128);
 
 	convertPCK(xdir + "/GEOGRAPH/BASEBITS.PCK", 32, 40, palette2, outdir);
 	convertPCK(xdir + "/GEOGRAPH/INTICON.PCK", 32, 40, palette2, outdir);
-	convertPCK(xdir + "/TERRAIN/BLANKS.PCK", 32, 40, palette2, outdir);
-	convertPCK(xdir + "/UFOGRAPH/CURSOR.PCK", 32, 40, palette2, outdir);
-	convertPCK(xdir + "/UFOGRAPH/HIT.PCK", 32, 40, palette2, outdir);
-	convertPCK(xdir + "/UFOGRAPH/SMOKE.PCK", 32, 40, palette2, outdir);
-	convertPCK(xdir + "/UFOGRAPH/X1.PCK", 128, 64, palette2, outdir);
-	convertPCK(xdir + "/UNITS/BIGOBS.PCK", 32, 48, palette2, outdir);
-	convertPCK(xdir + "/UNITS/CELATID.PCK", 32, 40, palette2, outdir);
-	convertPCK(xdir + "/UNITS/CHRYS.PCK", 32, 40, palette2, outdir);
-	convertPCK(xdir + "/UNITS/CIVF.PCK", 32, 40, palette2, outdir);
-	convertPCK(xdir + "/UNITS/CIVM.PCK", 32, 40, palette2, outdir);
-	convertPCK(xdir + "/UNITS/CYBER.PCK", 32, 40, palette2, outdir);
-	convertPCK(xdir + "/UNITS/ETHEREAL.PCK", 32, 40, palette2, outdir);
-	convertPCK(xdir + "/UNITS/FLOATER.PCK", 32, 40, palette2, outdir);
-	convertPCK(xdir + "/UNITS/FLOOROB.PCK", 32, 40, palette2, outdir);
-	convertPCK(xdir + "/UNITS/HANDOB.PCK", 32, 40, palette2, outdir);
-	convertPCK(xdir + "/UNITS/MUTON.PCK", 32, 40, palette2, outdir);
-	convertPCK(xdir + "/UNITS/SECTOID.PCK", 32, 40, palette2, outdir);
-	convertPCK(xdir + "/UNITS/SILACOID.PCK", 32, 40, palette2, outdir);
-	convertPCK(xdir + "/UNITS/SNAKEMAN.PCK", 32, 40, palette2, outdir);
-	convertPCK(xdir + "/UNITS/TANKS.PCK", 32, 40, palette2, outdir);
-	convertPCK(xdir + "/UNITS/XCOM_0.PCK", 32, 40, palette2, outdir);
-	convertPCK(xdir + "/UNITS/XCOM_1.PCK", 32, 40, palette2, outdir);
-	convertPCK(xdir + "/UNITS/XCOM_2.PCK", 32, 40, palette2, outdir);
-	convertPCK(xdir + "/UNITS/X_REAP.PCK", 32, 40, palette2, outdir);
-	convertPCK(xdir + "/UNITS/X_ROB.PCK", 32, 40, palette2, outdir);
-	convertPCK(xdir + "/UNITS/ZOMBIE.PCK", 32, 40, palette2, outdir);
+
+	convertPCK(xdir + "/TERRAIN/BARN.PCK", 32, 40, palette5, outdir);
+	convertPCK(xdir + "/TERRAIN/BLANKS.PCK", 32, 40, palette5, outdir);
+	convertPCK(xdir + "/TERRAIN/CULTIVAT.PCK", 32, 40, palette5, outdir);
+	convertPCK(xdir + "/TERRAIN/DESERT.PCK", 32, 40, palette5, outdir);
+	convertPCK(xdir + "/TERRAIN/FOREST.PCK", 32, 40, palette5, outdir);
+	convertPCK(xdir + "/TERRAIN/FRNITURE.PCK", 32, 40, palette5, outdir);
+	convertPCK(xdir + "/TERRAIN/JUNGLE.PCK", 32, 40, palette5, outdir);
+	convertPCK(xdir + "/TERRAIN/MOUNT.PCK", 32, 40, palette5, outdir);
+	convertPCK(xdir + "/TERRAIN/POLAR.PCK", 32, 40, palette5, outdir);
+	convertPCK(xdir + "/TERRAIN/ROADS.PCK", 32, 40, palette5, outdir);
+	convertPCK(xdir + "/TERRAIN/URBAN.PCK", 32, 40, palette5, outdir);
+	convertPCK(xdir + "/TERRAIN/URBITS.PCK", 32, 40, palette5, outdir);
+
+	convertPCK(xdir + "/UFOGRAPH/CURSOR.PCK", 32, 40, palette5, outdir);
+	convertPCK(xdir + "/UFOGRAPH/HIT.PCK", 32, 40, palette5, outdir);
+	convertPCK(xdir + "/UFOGRAPH/SMOKE.PCK", 32, 40, palette5, outdir);
+	convertPCK(xdir + "/UFOGRAPH/X1.PCK", 128, 64, palette5, outdir);
+	convertPCK(xdir + "/UNITS/BIGOBS.PCK", 32, 48, palette5, outdir);
+	convertPCK(xdir + "/UNITS/CELATID.PCK", 32, 40, palette5, outdir);
+	convertPCK(xdir + "/UNITS/CHRYS.PCK", 32, 40, palette5, outdir);
+	convertPCK(xdir + "/UNITS/CIVF.PCK", 32, 40, palette5, outdir);
+	convertPCK(xdir + "/UNITS/CIVM.PCK", 32, 40, palette5, outdir);
+	convertPCK(xdir + "/UNITS/CYBER.PCK", 32, 40, palette5, outdir);
+	convertPCK(xdir + "/UNITS/ETHEREAL.PCK", 32, 40, palette5, outdir);
+	convertPCK(xdir + "/UNITS/FLOATER.PCK", 32, 40, palette5, outdir);
+	convertPCK(xdir + "/UNITS/FLOOROB.PCK", 32, 40, palette5, outdir);
+	convertPCK(xdir + "/UNITS/HANDOB.PCK", 32, 40, palette5, outdir);
+	convertPCK(xdir + "/UNITS/MUTON.PCK", 32, 40, palette5, outdir);
+	convertPCK(xdir + "/UNITS/SECTOID.PCK", 32, 40, palette5, outdir);
+	convertPCK(xdir + "/UNITS/SILACOID.PCK", 32, 40, palette5, outdir);
+	convertPCK(xdir + "/UNITS/SNAKEMAN.PCK", 32, 40, palette5, outdir);
+	convertPCK(xdir + "/UNITS/TANKS.PCK", 32, 40, palette5, outdir);
+	convertPCK(xdir + "/UNITS/XCOM_0.PCK", 32, 40, palette5, outdir);
+	convertPCK(xdir + "/UNITS/XCOM_1.PCK", 32, 40, palette5, outdir);
+	convertPCK(xdir + "/UNITS/XCOM_2.PCK", 32, 40, palette5, outdir);
+	convertPCK(xdir + "/UNITS/X_REAP.PCK", 32, 40, palette5, outdir);
+	convertPCK(xdir + "/UNITS/X_ROB.PCK", 32, 40, palette5, outdir);
+	convertPCK(xdir + "/UNITS/ZOMBIE.PCK", 32, 40, palette5, outdir);
 
 	convertDAT(xdir + "/GEOGRAPH/TEXTURE.DAT", 32, 32, palette2, outdir);
 	convertDAT(xdir + "/UFOGRAPH/SPICONS.DAT", 32, 24, palette2, outdir);
